@@ -129,8 +129,16 @@ class CallGraph:
             (nx.subgraph(self.cg, nx.dfs_tree(self.cg, source=n))
              for n, d in self.cg.in_degree() if d == 0))
 
-
     def undirected_components(self):
         return self.__make_components(
             (nx.subgraph(self.cg, cc)
              for cc in nx.connected_components(self.cg.to_undirected())))
+
+    def naive_inlining_search_space_size(self):
+        return 2**self.number_edges()
+
+    def undirected_connected_components_inlining_search_space_size(self):
+        return sum(2**cc.number_edges() for cc in self.undirected_components())
+
+    def directed_connected_components_inlining_search_space_size(self):
+        return sum(2**cc.number_edges() for cc in self.directed_components())
