@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='pycallgraph',
-    version='0.0.1',
+    name='pyllcallgraph',
+    version='0.0.2',
     author='Theodoros Theodoridis',
     author_email='theodort@inf.ethz.ch',
     description='An LLVM call graph wrapper',

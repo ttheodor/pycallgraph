@@ -47,7 +47,7 @@ class CallGraph:
         self.cg.add_edge(e[0], e[1])
 
     def add_edges(self, es):
-        self.cg.add_edges(es)
+        self.cg.add_edges_from(es)
 
     def drop_edges_from_callers_with_many_callees(self, threshold):
         edges_to_drop = []
@@ -87,7 +87,7 @@ class CallGraph:
         ncg = self.__copy() if copy else self
         ncg.drop_edge(e, copy=False)
 
-        for v1, n, k1 in ncg.cg.out_edges(v, keys=True):
+        for v1, n, k1 in list(ncg.cg.out_edges(v, keys=True)):
             nk = ncg.cg.add_edge(u, n)
             ncg.relate_edges((v1, n, k1), (u, n, nk))
             for e in ncg.get_related_edges((v1, n, k1)):
@@ -133,12 +133,3 @@ class CallGraph:
         return self.__make_components(
             (nx.subgraph(self.cg, cc)
              for cc in nx.connected_components(self.cg.to_undirected())))
-
-    def naive_inlining_search_space_size(self):
-        return 2**self.number_edges()
-
-    def undirected_connected_components_inlining_search_space_size(self):
-        return sum(2**cc.number_edges() for cc in self.undirected_components())
-
-    def directed_connected_components_inlining_search_space_size(self):
-        return sum(2**cc.number_edges() for cc in self.directed_components())
