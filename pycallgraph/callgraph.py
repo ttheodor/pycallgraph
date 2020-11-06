@@ -19,6 +19,9 @@ class CallGraph:
     def number_edges(self):
         return self.cg.number_of_edges()
 
+    def out_degrees(self):
+        return (d for _, d in self.cg.out_degree())
+
     def relate_edges(self, e1, e2):
         if e1 == e2:
             return

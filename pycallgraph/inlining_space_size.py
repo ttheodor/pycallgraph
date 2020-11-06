@@ -3,11 +3,13 @@ def naive_inlining_space_size(cg):
 
 
 def undirected_partitioned_inlining_space_size(cg):
-    return sum(2**cc.number_edges() for cc in cg.undirected_components())
+    s = sum(2**cc.number_edges() for cc in cg.undirected_components())
+    return s if s > 0 else 1
 
 
 def directed_connected_components_inlining_space_size(cg):
-    return sum(2**cc.number_edges() for cc in cg.directed_components())
+    s = sum(2**cc.number_edges() for cc in cg.directed_components())
+    return s if s > 0 else 1
 
 
 def recursive_inlining_space_size(cg, directed=True):
@@ -22,7 +24,7 @@ def recursive_inlining_space_size(cg, directed=True):
 
     if directed:
         dccs = list(cg.directed_components())
-        if len(ccs) > 1:
+        if len(dccs) > 1:
             return sum(recursive_inlining_space_size(cc) for cc in dccs)
 
     bridges = cg.bridges()
