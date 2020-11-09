@@ -3,18 +3,20 @@ def naive_inlining_space_size(cg):
 
 
 def undirected_partitioned_inlining_space_size(cg):
-    s = sum(2**cc.number_edges() for cc in cg.undirected_components())
+    s = sum(2**cc.number_edges() for cc in cg.undirected_components()
+            if cc.number_edges() > 0)
     return s if s > 0 else 1
 
 
 def directed_connected_components_inlining_space_size(cg):
-    s = sum(2**cc.number_edges() for cc in cg.directed_components())
+    s = sum(2**cc.number_edges() for cc in cg.directed_components()
+            if cc.number_edges() > 0)
     return s if s > 0 else 1
 
 
 def recursive_inlining_space_size(cg, directed=True):
     if cg.number_edges() == 0:
-        return 0
+        return 1
     if cg.number_edges() == 1:
         return 2
 
