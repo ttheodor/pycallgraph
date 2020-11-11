@@ -16,6 +16,9 @@ class CallGraph:
         c.related_edges = deepcopy(self.related_edges)
         return c
 
+    def edges(self):
+        return list(self.cg.edges)
+
     def number_edges(self):
         return self.cg.number_of_edges()
 
