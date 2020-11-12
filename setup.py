@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pyllcallgraph',
-    version='0.0.6',
+    version='0.0.7',
     author='Theodoros Theodoridis',
     author_email='theodort@inf.ethz.ch',
     description='An LLVM call graph wrapper',

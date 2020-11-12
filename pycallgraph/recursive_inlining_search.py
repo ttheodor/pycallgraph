@@ -27,7 +27,9 @@ def generate_configurations_recursive_ccs(ccs, decisions):
 
 
 def generate_configurations_recursive(cg, decisions=[]):
-    assert cg.number_edges() > 0
+    if cg.number_edges() == 0:
+        yield decisions
+        return
     if cg.number_edges() == 1:
         e = cg.edge_cc(cg.edges()[0])
         yield decisions + [InliningDecision(e, True)]
