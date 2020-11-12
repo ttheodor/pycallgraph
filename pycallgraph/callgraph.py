@@ -60,7 +60,7 @@ class CallGraph:
 
     def add_edges(self, es):
         for e in es:
-            self.add_edge(es)
+            self.add_edge(e)
 
     def drop_edges_from_callers_with_many_callees(self, threshold):
         edges_to_drop = []
