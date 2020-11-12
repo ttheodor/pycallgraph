@@ -16,6 +16,12 @@ class CallGraph:
         c.related_edges = deepcopy(self.related_edges)
         return c
 
+    def edge_cc(self, e):
+        return (*self.cg[e[0]][e[1]][e[2]]['cc'], e[2])
+
+    def edges_cc(self):
+        return [self.edge_cc(e) for e in self.cg.edges]
+
     def edges(self):
         return list(self.cg.edges)
 
@@ -50,10 +56,11 @@ class CallGraph:
         return list(self.related_edges[e])
 
     def add_edge(self, e):
-        self.cg.add_edge(e[0], e[1])
+        self.cg.add_edge(e[0], e[1], None, cc=(e[0], e[1]))
 
     def add_edges(self, es):
-        self.cg.add_edges_from(es)
+        for e in es:
+            self.add_edge(es)
 
     def drop_edges_from_callers_with_many_callees(self, threshold):
         edges_to_drop = []
@@ -93,8 +100,9 @@ class CallGraph:
         ncg = self.__copy() if copy else self
         ncg.drop_edge(e, copy=False)
 
-        for v1, n, k1 in list(ncg.cg.out_edges(v, keys=True)):
+        for v1, n, k1, cc in list(ncg.cg.out_edges(v, data='cc', keys=True)):
             nk = ncg.cg.add_edge(u, n)
+            ncg.cg[u][n][nk]['cc'] = cc
             ncg.relate_edges((v1, n, k1), (u, n, nk))
             for e in ncg.get_related_edges((v1, n, k1)):
                 ncg.relate_edges((u, n, nk), e)
