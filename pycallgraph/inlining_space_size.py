@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 def naive_inlining_space_size(cg):
     return 2**cg.number_edges()
 
@@ -30,7 +32,13 @@ def recursive_inlining_space_size(cg, directed=True):
             return sum(recursive_inlining_space_size(cc) for cc in dccs)
 
     bridges = cg.bridges()
-    e = cg.least_eccentric_edge(bridges if bridges else None)
+    if bridges:
+        e = cg.least_eccentric_edge(bridges)
+    else:
+        u = max(cg.cg.out_degree(), key=itemgetter(1))[0]
+        es = list(cg.cg.out_edges(u, keys=True))
+        v = min(cg.cg.in_degree(v for _, v, _ in es), key=itemgetter(1))[0]
+        e = next(filter(lambda e: e[0] == u and e[1] == v, es))
 
     cg_e_dropped = cg.drop_edge(e, copy=True)
     cg_e_merged = cg.merge_edge(e, copy=True)
